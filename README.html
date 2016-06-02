@@ -1,0 +1,149 @@
+<h2>GHCi Commands</h2>
+
+<p>Use the following steps to load, use and retrive information about the <code>CS</code> module.</p>
+
+<ol>
+<li><p>Load package</p>
+
+<pre><code class="`"> -&gt;  cphss git:(master) x ghci
+ GHCi, version 7.8.4: http://www.haskell.org/ghc/  :? for help
+ Loading package ghc-prim ... linking ... done.
+ Loading package integer-gmp ... linking ... done.
+ Loading package base ... linking ... done.
+ Prelude&gt; :l CS
+ [1 of 4] Compiling AlgebraicDataTypes ( AlgebraicDataTypes.hs, interpreted )
+ [2 of 4] Compiling NoviCollection   ( NoviCollection.hs, interpreted )
+ [3 of 4] Compiling BasicsCollection ( BasicsCollection.hs, interpreted )
+ [4 of 4] Compiling CS               ( CS.hs, interpreted )
+ Ok, modules loaded: CS, BasicsCollection, NoviCollection, AlgebraicDataTypes.
+</code></pre></li>
+<li><p>Browse package</p>
+
+<pre><code class="`"> *CS&gt; :browse!
+</code></pre>
+
+<p> should return,</p>
+
+<pre><code class="`"> -- imported via AlgebraicDataTypes
+ data List a
+   = AlgebraicDataTypes.Nil | AlgebraicDataTypes.Cons a (List a)
+ class Mycomp a where
+   AlgebraicDataTypes.comp :: a -&gt; a -&gt; Bool
+ class Mycomp a =&gt; MycompChild a where
+   AlgebraicDataTypes.st :: (Ord a, Eq a) =&gt; a -&gt; a -&gt; Bool
+   AlgebraicDataTypes.bte :: (Ord a, Eq a) =&gt; a -&gt; a -&gt; Bool
+   AlgebraicDataTypes.bt :: (Ord a, Eq a) =&gt; a -&gt; a -&gt; Bool
+   AlgebraicDataTypes.ste :: (Ord a, Eq a) =&gt; a -&gt; a -&gt; Bool
+   AlgebraicDataTypes.cmin :: Ord a =&gt; a -&gt; a -&gt; a
+   AlgebraicDataTypes.cmax :: Ord a =&gt; a -&gt; a -&gt; a
+ class Sets (f :: * -&gt; *) where
+   AlgebraicDataTypes.exists :: f a -&gt; (a -&gt; Bool) -&gt; Bool
+ -- imported via BasicsCollection
+ data Car
+   = BasicsCollection.Car {BasicsCollection.company :: String,
+   BasicsCollection.model :: String,
+   BasicsCollection.year :: Int}
+ data Day
+   = BasicsCollection.Monday
+   | BasicsCollection.Tuesday
+   | BasicsCollection.Wednesday
+   | BasicsCollection.Thursday
+   | BasicsCollection.Friday
+   | BasicsCollection.Saturday
+   | BasicsCollection.Sunday
+ data Tree a
+   = BasicsCollection.EmptyTree
+   | BasicsCollection.Node a (Tree a) (Tree a)
+ class YesNo a where
+   BasicsCollection.yesno :: a -&gt; Bool
+   calcBmis :: RealFloat a =&gt; [(a, a)] -&gt; [a]
+   calcBmis2 :: RealFloat a =&gt; [(a, a)] -&gt; [a]
+   cylinder :: RealFloat a =&gt; a -&gt; a -&gt; a
+   factorial :: Integral a =&gt; a -&gt; a
+   myConc :: [[Char]] -&gt; [[Char]] -&gt; [[Char]]
+   myMax :: (Ord a, Num a) =&gt; a -&gt; a -&gt; a -&gt; a
+   quicksort :: Ord a =&gt; [a] -&gt; [a]
+   rightTriangles :: [(Integer, Integer, Integer)]
+ -- imported via NoviCollection
+ class Cp a where
+   (NoviCollection.==) :: a -&gt; a -&gt; Bool
+   (NoviCollection./=) :: a -&gt; a -&gt; Bool
+ data NCList a
+   = NoviCollection.Nil | NoviCollection.Cons a (NCList a)
+ data NCTree a
+   = NoviCollection.Node a (NCTree a) (NCTree a)
+   | NoviCollection.Empty
+ data Shp
+   = NoviCollection.Shp1 Float Float Float
+   | NoviCollection.Shp2 Float Float Float Float
+ data SomeStru
+   = NoviCollection.SomeStru {NoviCollection.entr1 :: String,
+ NoviCollection.entr2 :: Int}
+   addVec :: (Num a, Num t) =&gt; (a, t) -&gt; (a, t) -&gt; (a, t)
+   areasq :: Num a =&gt; a -&gt; a
+   areat :: Floating a =&gt; a -&gt; a -&gt; a -&gt; a
+   asum :: [Integer] -&gt; [Integer]
+   classify :: (Num a, Eq a) =&gt; a -&gt; [Char]
+   doit :: Int -&gt; Int
+   doubleMe :: Num a =&gt; a -&gt; a
+   doubleSmallNumber :: (Ord a, Num a) =&gt; a -&gt; a
+   dsn :: (Ord a, Num a) =&gt; a -&gt; a
+   f :: Integer -&gt; Integer
+   fac :: (Num a, Eq a) =&gt; a -&gt; a
+   fact :: Integer -&gt; Integer
+   farrayRemap :: (Num b, Enum b) =&gt; b -&gt; b -&gt; b -&gt; [b]
+   farrayRev :: Enum a =&gt; a -&gt; a -&gt; [a]
+   foo :: Floating a =&gt; a -&gt; a
+   foo2 :: Floating a =&gt; a -&gt; a
+   fsin :: Floating a =&gt; a -&gt; a -&gt; a
+   g :: Num a =&gt; (t -&gt; a) -&gt; t -&gt; a
+   g2 :: Num a =&gt; (t -&gt; a) -&gt; (t -&gt; a) -&gt; t -&gt; a
+   gDown :: Integer -&gt; [Integer]
+   infinity :: a -&gt; [a]
+   isBigger :: Ord a =&gt; a -&gt; a -&gt; Bool
+   lLen :: Num a =&gt; [t] -&gt; a
+   laugh :: [Char]
+   lc :: (Ord t, Num t) =&gt; [(t, t)] -&gt; [t]
+   listlength :: [Integer] -&gt; Integer
+   lowest :: Int -&gt; Int -&gt; Int
+   maksimum :: (Ord a, Num a) =&gt; [a] -&gt; a
+   maxList :: [Int] -&gt; Int
+   maxed :: Int -&gt; Int -&gt; Int -&gt; Int -&gt; Int
+   maxi :: Int -&gt; Int -&gt; Int
+   multThree :: Num a =&gt; a -&gt; a -&gt; a -&gt; a
+   multWithNine :: Integer -&gt; Integer -&gt; Integer
+   multiplyList :: Integer -&gt; [Integer] -&gt; [Integer]
+   myFoo :: Num a =&gt; a -&gt; a
+   myfun :: [t] -&gt; Maybe [t]
+   mylookup :: Cp a =&gt; a -&gt; [(a, t)] -&gt; Maybe a
+   nd :: (a, b, c) -&gt; b
+   numofs :: (Ord a, Num a) =&gt; a -&gt; a -&gt; [Char]
+   pows :: (Ord a, Num a) =&gt; a -&gt; a -&gt; a
+   qroots :: (Ord t, Floating t) =&gt; (t, t, t) -&gt; (t, t)
+   rd :: (a, b, c) -&gt; c
+   recu :: Num t =&gt; [t] -&gt; [t]
+   recuu :: (Ord t, Num t) =&gt; t -&gt; [t] -&gt; [t]
+   recuuu :: (Ord a, Num a) =&gt; a -&gt; [t] -&gt; [t]
+   sq :: Num a =&gt; a -&gt; a
+   st :: (a, b, c) -&gt; a
+   surf :: Shp -&gt; Float
+   takeElems :: (Ord a, Num a) =&gt; a -&gt; [t] -&gt; [t]
+   thatis :: (Num t, Floating [t], Enum t) =&gt; [t] -&gt; [t]
+   trig :: Floating a =&gt; a -&gt; a
+   volbox :: Num a =&gt; a -&gt; a -&gt; a -&gt; a
+   volcyl :: Floating a =&gt; a -&gt; a -&gt; a
+ -- imported via NoviCollection, Prelude
+   take :: Int -&gt; [a] -&gt; [a]
+</code></pre></li>
+<li><p>Use known name to retrieve information about the item</p>
+
+<pre><code class="`"> *CS&gt; :info quicksort
+</code></pre>
+
+<p> returns,</p>
+
+<pre><code class="`"> quicksort :: Ord a =&gt; [a] -&gt; [a]
+ -- Defined at BasicsCollection.hs:88:1
+</code></pre></li>
+</ol>
+
