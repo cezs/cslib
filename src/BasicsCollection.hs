@@ -14,7 +14,7 @@ Also, see $todos$.
 -}
 module BasicsCollection (
   -- * Functions
-  main,
+  sess,
   factorial,
   rightTriangles,
   myConc,
@@ -35,8 +35,8 @@ module BasicsCollection (
 import Data.Char
 
 -- TODO: Move to new module ProceduralSessions
-main :: IO()
-main = do
+sess :: IO()
+sess = do
   putStrLn "Enter string to be changed to uppercase"
   name <- getLine
   if null name
@@ -62,7 +62,7 @@ myMax a b c
   | c > d = c
   | otherwise = d
   where d = a * b
-
+xo
 calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
 calcBmis xs = [bmi w h | (w, h) <- xs]
   where bmi weight height = weight / height ^ 2  
