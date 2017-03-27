@@ -3,21 +3,29 @@
 {-|
 Module: CS
 Copyright: (c) Cezary Stankiewicz 2016
-Description: This module (4 items)
-License: Free
-Maintainer  : c.stankiewicz@wlv.ac.uk
+Description: This module (2 items)
+License: -
+Maintainer: c.stankiewicz@wlv.ac.uk
 Stability   :  experimental
 -}
+
 module CS (
   module BasicsCollection,
-  module NoviCollection,
-  module AlgebraicDataTypes,
-  -- module ProceduralSessions,
-  -- module MyHaskell
+  module UseOfCM
 ) where
 
 import BasicsCollection hiding (main)
-import NoviCollection
-import AlgebraicDataTypes
--- import ProceduralSessions
--- import MyHaskell
+import UseOfCM
+
+{-|
+$todos
+TODO
+-- module A (
+--   module B,
+--   module C
+--  ) where
+
+-- import B hiding (f)
+-- import C (a, b)
+$todos
+-}
