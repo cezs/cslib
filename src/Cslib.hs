@@ -1,21 +1,21 @@
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 {-|
-Module: CS
+Module: Cslib
 Copyright: (c) Cezary Stankiewicz 2016
-Description: This module (2 items)
+Description: 
 License: -
 Maintainer: c.stankiewicz@wlv.ac.uk
-Stability   :  experimental
+Stability:  experimental
 -}
 
-module CS (
-  module BasicsCollection,
-  module UseOfCM
+module Cslib (
+  module CslibBasics,
+  module CslibCM
 ) where
 
-import BasicsCollection hiding (main)
-import UseOfCM
+import CslibBasics hiding (main)
+import CslibCM
 
 {-|
 $todos

@@ -1,28 +1,32 @@
 {-# LANGUAGE MultiParamTypeClasses, TypeFamilies #-}
 {-|
-Module: BasicsCollection
-Description: Initial Attempts
+Module: CslibBasics
+Description: -
 License: -
 Maintainer: c.stankiewicz@wlv.ac.uk
 
-First module written in Haskell language (# items)
+Introductory examples
 
 Use GHCi with @:load BasicsCollection@.
 To reload use @:reload@.
 
 Also, see $todos$.
 -}
-module BasicsCollection where
+module CslibBasics where
 
+-- import Data.Set     hiding (map)
+-- import Data.IntSet  hiding (map)
+-- import Prelude      hiding ((==), (/=))
+import Prelude
 import Data.Char
-import Data.Set     hiding (map)
-import Data.IntSet  hiding (map)
-import Prelude hiding ((==), (/=))
-import Data.List as List
+import Data.Set
+import Data.IntSet
+import Data.List
+import Data.List.Split
+import Data.Text
 
---------------------------------------------------------------------------------
+
 -- functions -------------------------------------------------------------------
---------------------------------------------------------------------------------
 
 {-|-}
 laugh = "Ha!"
@@ -59,7 +63,7 @@ multThree x y z = x * y * z
 multWithNine = multThree 9
 
 {-| reverse sequence given with boundaries -}
-farrayRev a z = reverse [a .. z]
+farrayRev a z = Data.List.reverse [a .. z]
 
 {-|-}
 fact :: Integer -> Integer
@@ -68,7 +72,7 @@ fact n = product [1..n]
 {-|-}
 addVec a b = (fst a + fst b, snd a + snd b)
 
--- if-then-else ----------------------------------------------------------------
+-- conditional -----------------------------------------------------------------
 
 {-|-}
 pows n m = if m > 0 then m - 1 else n * n
@@ -160,16 +164,16 @@ maxList (a:az)
    | otherwise = a
 
 {-| guarded recursion -}
-recuu _ [] = []
-recuu n _
+multBy _ [] = []
+multBy n _
     | n <= 0 = []
-recuu n (x:xs) = n * x : recuu n xs
+multBy n (x:xs) = n * x : multBy n xs
 
 {-| guarded recursion -}
-recuuu _ [] = []
-recuuu n _
+getSubset _ [] = []
+getSubset n _
     | n <= 0 = []
-recuuu n (x:xs) = x : recuuu (n-1) xs
+getSubset n (x:xs) = x : getSubset (n-1) xs
 
 factorial :: (Integral a) => a -> a
 factorial n | n < 2 = 1
@@ -197,7 +201,7 @@ infinity :: a -> [a]
 infinity x = x : infinity x
 
 {-|-}
-take' x n = recuuu x (infinity n)
+take' x n = getSubset x (infinity n)
 
 {-|-}
 maksimum :: (Ord a, Num a) => [a] -> a
@@ -220,15 +224,9 @@ gDown n = n : gDown (n - 1)
 
 {-|-}
 myDrop :: Int -> [a] -> [a]
-myDrop n xs = if n <= 0 || Prelude.null xs then xs else myDrop (n - 1) (tail xs)
+myDrop n xs = if n <= 0 || Prelude.null xs then xs else myDrop (n - 1) (Data.List.tail xs)
 
-{-|
-example of usage:
-
-  >>> quicksort [2, 1, 4, 3, 6, 5, 8, 7, 10, 9]
-
-  [1,2,3,4,5,6,7,8,9,10]
--}
+{-|-}
 quicksort :: (Ord a) => [a] -> [a]  
 quicksort [] = []  
 quicksort (x:xs) =
@@ -276,7 +274,7 @@ fac n = n * fac(n-1)
 
 lc xs = [foo | (n, m) <- xs, let foo = n + m, foo >= 10]
 
--- rightTriangles = [(a,b,c) | c <- [1..128], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2 ]
+rightTriangles = [(a,b,c) | c <- [1..128], b <- [1..c], a <- [1..b], a^2 + b^2 Prelude.== c^2 ]
 
 myConc przym rzecz = [prz ++ " " ++ rz | prz <- przym, rz <- rzecz]
 
@@ -290,7 +288,7 @@ calcBmis2 xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
 -- functorial -----------------------------------------------------------------
           
 {-| dump shift of sequence provided with boundary paramaters -}
-farrayRemap mov f t = map (+mov) [f .. t]
+farrayRemap mov f t = Data.List.map (+mov) [f .. t]
 
 {-|-}
 -- p = filt_pinP [2..]
@@ -305,14 +303,9 @@ myfun a = Just a
 
 {-|-}
 mylookup _ [] = Nothing
-mylookup key ((x,y):s) = if key == x then Just x else mylookup key s
+mylookup key ((x,y):s) = if key Prelude.== x then Just x else mylookup key s
 
---------------------------------------------------------------------------------
 -- data, type, class, instance -------------------------------------------------
---------------------------------------------------------------------------------
-
--- Error: Illegal literal in type (use DataKinds to enable): 0
--- data Binr = 0 | 1
 
 {-|-}
 data NCTree a = NCNode a (NCTree a) (NCTree a) | Empty deriving (Show)
@@ -341,7 +334,7 @@ instance Cp Dire where
 class Cp a where
     (==) :: a -> a -> Bool
     (/=) :: a -> a -> Bool
-    x == y = not ( x /= y)
+    x == y = not ( x CslibBasics./= y)
 
 type Endomorphic a = a -> a
 
@@ -413,23 +406,6 @@ instance YesNo Int where
 
 data List a = Nil | Cons a (List a)
 
---"a type a is an instance of the class Eq if there is an (overloaded) operation ==, of the appropriate type, defined on it." i.e., "Thus Eq a is not a type expression, but rather it expresses a constraint on a type, and is called a context."
---class Eq a where 
---  (==)  ::  a -> a -> Bool
---instance Eq Integer where
---  x == y = x `integerEq` y
-
--- elem:: (Eq a) -> a -> [a] -> Bool
--- read if a is instance of Eq then elem on type a has
--- that type ?expresed in type modulation?
-
-
--- it is like template class in c++, i.e., NOTE EXACTLY operator==
-
--- template<class a> class Mycomp { 
---   virtual bool comp(a, a); 
---   bool operator==()
--- }
 
 class Mycomp a where
   comp :: a -> a -> Bool
@@ -471,3 +447,55 @@ instance Mycomp Char where
 class (Mycomp a)  => (MycompChild a) where
   st0, ste, bt, bte :: (Ord a, Eq a) => a -> a -> Bool
   cmin, cmax:: Ord a => a -> a -> a
+
+-- other -----------------------------------------------------------------------
+
+reverse :: [a] -> [a]
+reverse = Data.List.foldl (\n -> (\x -> (x : n))) []
+
+{-| prepend second element of tuple argument to first list tuple argument -}
+prepend :: ([a], a) -> [a]
+prepend = uncurry (\n -> (\x -> (x : n)))
+
+fullWords :: Integer -> String
+fullWords n = Data.List.concat $ Data.List.intersperse "-" [digits!!digitToInt d | d <- show n]
+  where digits = ["zero", "one", "two", "three", "four",
+                  "five", "six", "seven", "eight", "nine"]
+
+-- firstTaskSplit arg = Data.Text.splitOn "-" arg
+
+-- fullWordsInverse :: String -> Integer
+-- fullWordsInverse n = [digits!!digitToInt d | d <- show n]
+--   where digits = ['0','1','2','3','4','5','6','7','8','9']
+
+mysq :: (Num a) => [a] -> [a]
+mysq [] = []
+mysq (x:xs) = x*x : mysq(xs)
+
+data Sec = Sec { geta :: Int, getb :: Int, getc :: Int } deriving (Show)
+
+my2li xs = Data.Text.split (Prelude.==' ') $ pack xs
+
+myReadLi [] = 0
+myReadLi (x:xs) = read x 
+
+type Lisec = [Sec]
+
+data Lab = A | B | C deriving (Show, Eq)
+type Path = [(Lab, Int)]
+
+takeSt :: [(a,b)] -> [a]
+takeSt xs = Data.List.map fst xs
+
+takeNd :: [(a,b)] -> [b]
+takeNd xs = Data.List.map snd xs
+
+myFindLab :: Lab -> Path -> Maybe Lab
+myFindLab lab xs = Data.List.find (Prelude.==lab) (takeSt xs)
+
+myFindInt :: Int -> Path -> Maybe Int
+myFindInt int xs = Data.List.find (Prelude.==int) (takeNd xs)
+
+subsets _      0 = [[]]
+subsets []     _ = []
+subsets (x:xs) n = Data.List.map (x :) (subsets xs (n - 1)) ++ (subsets xs n)

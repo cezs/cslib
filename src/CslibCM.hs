@@ -1,13 +1,13 @@
 {-# OPTIONS_HADDOCK show-extensions #-}
 {-|
-Module: UseOfCM
+Module: CslibCM
 Copyright: (c) Cezary Stankiewicz 2016
-Description: Short demo on Control.Monad module ++ Simple IO variations
+Description: Using Control.Monad module
 License: -
 Maintainer  : -
 Stability   :  experimental
 
-This module provides examples of use of Control.Monad module from different point of application. Currently, module provides only IO aspec of use.
+This module provides examples of use of Control.Monad module from different point of application. Currently, module provides only IO aspect of use.
 
 Examples are to be provided for:
 Control.Monad.<=<           Control.Monad.forM          Control.Monad.mplus
@@ -30,67 +30,36 @@ To find out information about all the provided definitions use the following com
 
 which lists all the module's definitions.
 
-Current version of module contains ~30 definitions with the following type annotations:
-main :: IO ()
-mainI :: IO ()
-mainA :: IO ()
-mainB :: IO ()
-mainC :: IO ()
-mainD :: IO ()
-mainE :: IO ()
-shout :: [Char] -> [Char]
-moder :: [Char] -> [Char]
-uglifier :: IO ()
-sumator :: String -> [(Int, String)]
-csactions :: Monad m => [m a] -> m ()
-csActionStack :: Monad m => m () -> [m ()]
-csActionStack5 :: Monad m => [m ()] -> [m ()]
-csActionStack2 :: a -> [a] -> [a]
-csActionStack3 :: Monad m => m () -> [m ()]
-data Tree a = EmptyTree | Node a (Tree a) (Tree a)
-EmptyTree :: Tree a
-Node :: a -> Tree a -> Tree a -> Tree a
-addEnd :: IO ()
-addEnd2 :: IO ()
-addEnd3 :: IO ()
-addEnd4 :: IO ()
-addEnd5 :: IO ()
-addEnd6 :: IO ()
-myMain :: IO ()
-nTimes :: Int -> IO () -> IO ()
-
 NOTES:
-
--- https://en.wikibooks.org/wiki/Haskell/Classes_and_types
-
--- Good introduction to Monads
 -- https://wiki.haskell.org/Introduction_to_IO
 -- https://en.wikibooks.org/wiki/Haskell/Understanding_monads
 -- https://en.wikibooks.org/wiki/Haskell/Monad_transformers
-
--- f :: a -> b -- is the type signature
--- f :: (a -> b) -> c -- content in brackets signalizes a function
 -}
-module UseOfCM where
+module CslibCM where
 
 import Data.Char (toUpper)
 import Data.Maybe
 import Control.Monad
 import System.Posix.Directory
 import System.Posix.Files
-import BasicsCollection -- internal dependency
 
-main = addEnd -- for compilation
+import CslibBasics
+
+{-|-}
+main = addEnd
 
 {-| identity -}
 mainI :: IO ()
 mainI = getLine >>= putStrLn
 
--- {-| convert to uppercase action ver.A0 -}
--- mainAver0 = putStrLn "Write your string: " >> fmap (\x -> map toUpper x) getLine >>= putStrLn
--- {-| convert to uppercase action ver.B0 -}
--- {-| introduces dependencies: shout -}
--- mainBver0 = putStrLn "Write your string: " >> fmap shout getLine >>= putStrLn
+{-| convert to uppercase action ver.A0 -}
+mainAver0 :: IO ()
+mainAver0 = putStrLn "Write your string: " >> fmap (\x -> map toUpper x) getLine >>= putStrLn
+
+{-| convert to uppercase action ver.B0 -}
+{-| introduces dependencies: shout -}
+mainBver0 :: IO ()
+mainBver0 = putStrLn "Write your string: " >> fmap shout getLine >>= putStrLn
 
 {-| convert to uppercase action ver.1 -}
 mainA :: IO ()
@@ -120,8 +89,8 @@ shout :: [Char] -> [Char]
 shout = map toUpper
 
 {-| Stub 1 -}
-moder :: [Char] -> [Char] -- needs type signature because reverse :: [a] -> [a]
-moder = reverse
+moder :: [Char] -> [Char]
+moder = Prelude.reverse
 
 {-| if compiled, try @man man | ./dmnt | ./dmnt@ -}
 uglifier :: IO ()
@@ -133,12 +102,8 @@ uglifier = liftM (moder . shout) getContents >>= putStrLn
 sumator :: String -> [(Int, String)]
 sumator v = reads v :: [(Int, String)]
 
--- topdown 1: f :: a -> IO ()
--- link 1: https://www.haskell.org/hoogle/?hoogle=a+-%3E+IO+%28%29
--- from @link 1 the most imidient choice for f is print having same type annotation
-
--- curio :: Read b => IO b
--- curio = liftM read getContents >>= return
+curio :: Read b => IO b
+curio = liftM read getContents >>= return
 
 {-| Perhaps use @csactions [putStr "Hello ", putStr "World.\n"]@
 or @csactions [Nothing, Just $ Nothing]@ -}
@@ -180,7 +145,11 @@ addEnd = getLine >>= return . (\str -> str ++ "\n") >>= putStr
 -- ---- but then you have to monadize its output using #return if it is not already monadic
 -- see: addEnd2, addEnd3
 addEnd2 = getLine >>= return . (\str -> str ++ "\n") >>= putStr
+
+{-|-}
 addEnd3 = liftM (\str -> str ++ "\n") getLine >>= putStr
+
+{-|-}
 addEnd4 = (return . (\str -> str ++ "\n") =<< getLine) >>= putStr
 
 {-|-}
@@ -214,30 +183,6 @@ nTimes :: Int -> IO () -> IO ()
 nTimes 0 action = return ()
 nTimes n action = do { action; nTimes (n-1) action }
 
--- -----------------------------------------------------------------------------
-
--- Forum Solution!
--- data ForumTree a = Tip a | Bin (ForumTree a) (ForumTree a)
--- instance Monad ForumTree where
---   return = Tip
---   Tip a >>= f = f a
---   Bin l r >>= f = Bin (l >>= f) (r >>= f)
-
--- -----------------------------------------------------------------------------
-
-{-| Stub 1: Use of Control.Monad.<=<, where
-@
-    (<=<) :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
-@
--}
-
-{-| Stub 2: Use of Control.Monad.=<<, where
-@
-@
--}
-
--- -----------------------------------------------------------------------------
-
 {-| Stub 1 -}
 newtype MyConf = MyConf { vao :: Bool } deriving (Show)
 
@@ -258,20 +203,10 @@ act = liftM return myConfLs $ myConfDef
 act2 :: Monad m => m MyConf
 act2 = liftM myConfLs (return $ myConfDef)
 
--- -----------------------------------------------------------------------------
-
--- data Optional = Limit | Only a deriving (Eq, Ord)
-
--- -----------------------------------------------------------------------------
-
--- ap = putStrLn "Input text:"; getLine >>= \line -> if isValid line then return $ Just line else return Nothing >>= (\val -> if isJust val then putStrLn "Storing..." else putStrLn "Invalid input"
-
--- isValid s = True 
-
--- -----------------------------------------------------------------------------
-
 {-|-}
 data TreeF a = NodeF { rootName :: a, hForestF :: ForestF a }
+
+{-|-}
 type ForestF a = [TreeF a]
 
 {-|-}
@@ -281,32 +216,6 @@ instance Functor TreeF where
 {-|-}
 fmapTreeF :: (t -> a) -> TreeF t -> TreeF a
 fmapTreeF f (NodeF x xs) = NodeF (f x) (map (fmapTreeF f) xs)
-
--- -----------------------------------------------------------------------------
-
--- ap = putStrLn "Input text:" >> getLine >>= \line -> if isValid line then return $ Just line else return Nothing >>= (\val -> if (isJust val) then putStrLn "Storing..." else putStrLn "Invalid input")
-
--- isValid s = True 
-
--------------------------------------------------------------------------------
- 
--- main1 = do putStrLn "What is 5! ?"
---           x <- readLn
---           if x == factorial 5
---               then putStrLn "You're right!"
---               else putStrLn "You're wrong!"
-
-
--- test takelist n = takelist (take n[1..])[1..]
-
--- testp pf = do print $ pf [3,7..][1..10]
--- main2 = do
---   (n:_) <- getargs
---   testp (case n of
---           "1" -> takelist
---           )
-
--- -----------------------------------------------------------------------------
 
 mainHio = return factorial 2
 
@@ -319,12 +228,6 @@ barHio :: (Ord a, Num a) => a -> Maybe a
 barHio v
   | v <= 0 = Nothing
   | otherwise = Just v
-
--- koc :: Maybe a -> a
-
--- koc var = var
-
--- tt :: a -> Maybe a
 
 ttHio n = do
   k <- fooHio n
@@ -359,21 +262,15 @@ see :: String -> String
 see s = s ++ "ioskwok"
 
 ss :: IO ()
-ss = fmap see nameReturn >>= putStrLn -- equivalent to liftM see nameReturn
+ss = fmap see nameReturn >>= putStrLn
 
--------------------------------------------------------------------------------
-
-sess :: IO()
-sess = do
-  putStrLn "Enter string to be changed to uppercase"
-  name <- getLine
-  if null name
-     then return ()
-  else do
-     let bigName = map toUpper name
-     putStrLn ("You have just entered"
-               ++ " "
-               ++ bigName
-               )
-            -- ++ "asking for uppercase version"
-     sess -- repeat
+-- sess :: IO()
+-- sess = do
+--   putStrLn "Enter string to be changed to uppercase"
+--   name <- getLine
+--   if null name
+--      then return ()
+--   else do
+--      let bigName = map toUpper name
+--      putStrLn ("You have just entered" ++ " " ++ bigName)
+--      sess
