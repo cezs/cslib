@@ -14,9 +14,6 @@ Also, see $todos$.
 -}
 module CslibBasics where
 
--- import Data.Set     hiding (map)
--- import Data.IntSet  hiding (map)
--- import Prelude      hiding ((==), (/=))
 import Prelude
 import Data.Char
 import Data.Set
@@ -29,58 +26,60 @@ import Data.Text
 -- functions -------------------------------------------------------------------
 
 {-|-}
+laugh :: [Char]
 laugh = "Ha!"
 
 {-|-}
+sq :: Num a => a -> a
 sq x = x * x
 
 {-|-}
-addOne n = 1 + n
+vol :: Num a => a -> a -> a -> a
+vol x y z  = x * y * z
 
 {-|-}
-volbox x y z  = x * y * z
+height :: Floating a => a -> a -> a
+height a r = sin(a) * r
 
 {-|-}
-fsin a r = sin(a) * r
+peach x = [1..10]**x
 
 {-|-}
-powEach x = [1..10]**x
+addthree :: Integer -> Integer
+addthree = (+3)
 
 {-|-}
-f = (+3)
-
-{-|-}
-g foo x = foo x * foo x
+g :: Num a => (t -> a) -> t -> a
+g f x = f x * f x
 
 {-|-}
 g2 :: Num a => (t -> a) -> (t -> a) -> t -> a
 g2 f1 f2 x = f1 x + f2 x
 
 {-|-}
-multThree x y z = x * y * z
+multWithTen :: Integer -> Integer -> Integer
+multWithTen = vol 10
 
 {-|-}
-multWithNine = multThree 9
-
-{-| reverse sequence given with boundaries -}
-farrayRev a z = Data.List.reverse [a .. z]
+revlist :: Enum a => a -> a -> [a]
+revlist a z = Data.List.reverse [a .. z]
 
 {-|-}
 fact :: Integer -> Integer
 fact n = product [1..n]
 
 {-|-}
+addVec :: (Num a, Num t) => (a, t) -> (a, t) -> (a, t)
 addVec a b = (fst a + fst b, snd a + snd b)
 
 -- conditional -----------------------------------------------------------------
 
 {-|-}
+pows :: (Num a, Ord a) => a -> a -> a
 pows n m = if m > 0 then m - 1 else n * n
 
 {-|-}
-doubleSmallNumber x = if x > 1 then x else x + x
-
-{-|-}
+dsn :: (Num a, Ord a) => a -> a
 dsn x = (if x > 100 then x else x * 2) + 1
 
 -- where -----------------------------------------------------------------------
@@ -90,23 +89,8 @@ foo n = n * pi * s / c
     where s = n * 2
           c = n * 4
 
-{-| multiply number by it's cube -}
-multByCube :: Int -> Int
-multByCube x  = x * i where i = x^3
-
 {-|-}
-volcyl r y = areac * y  where areac = sq (pi  * r)
-
-{-|-}
-areat a b c = sqrt ( s * (s - a) * (s - b) * (s - c) ) where s = (a + b + c) / 2
-	
-{-|-}
-numofs a b
-    | num > 0 = "pos"
-    | num < 0 = "neg"
-    | otherwise = "neu"
-        where
-        num = a + b
+volofcyl r y = areac * y  where areac = sq (pi  * r)
 
 {-|-}
 qroots (a, b, c) =
@@ -116,6 +100,14 @@ qroots (a, b, c) =
             r2 = e - sqrt d / (2 * a)
             d = b * b - 4 * a * c
             e = -b / (2 * a)
+
+{-|-}
+numofs a b
+    | num > 0 = "pos"
+    | num < 0 = "neg"
+    | otherwise = "neu"
+        where
+        num = a + b
 
 -- let-in ----------------------------------------------------------------------
 
@@ -128,12 +120,12 @@ foo2 n = let a = 4 / 5
 cylinder :: (RealFloat a) => a -> a -> a  
 cylinder r h = 
   let sideArea = 2 * pi * r * h
-      topArea = pi * r ^2
+      topArea = pi * r^2
   in  sideArea + 2 * topArea  
 
 -- case-of ---------------------------------------------------------------------
 
-{-| example of 'case' and 'of' -}
+{-|-}
 classify :: (Num a, Eq a) => a -> [Char]
 classify age = case age of 0 -> "newborn"
                            1 -> "infant"
@@ -142,48 +134,40 @@ classify age = case age of 0 -> "newborn"
 
 -- guards -----------------------------------------------------------------------
 
+{-|-}
 maxi :: Int -> Int -> Int
 maxi a b | a > b = a
          | otherwise = b
 
-{-| highest of the 4 Int arguments -}
-maxed :: Int -> Int -> Int -> Int -> Int
-maxed a b c d = maxi a (maxi b (maxi c d))
-
-{-| lowest of the 2 Int arguments -}
-lowest :: Int -> Int -> Int
-lowest a b | a < b = a
-           | otherwise = b 
-
-
-{-| maximum of the [Int] -}
+{-|-}
 maxList ::  [Int] -> Int
 maxList []  = 0
 maxList (a:az)
    | maxList az > a = maxList az
    | otherwise = a
 
-{-| guarded recursion -}
+{-|-}
 multBy _ [] = []
 multBy n _
     | n <= 0 = []
 multBy n (x:xs) = n * x : multBy n xs
 
-{-| guarded recursion -}
+{-|-}
 getSubset _ [] = []
 getSubset n _
     | n <= 0 = []
 getSubset n (x:xs) = x : getSubset (n-1) xs
 
+{-|-}
 factorial :: (Integral a) => a -> a
 factorial n | n < 2 = 1
 factorial n = n * factorial (n - 1)
 
+{-|-}
 myMax a b c
   | c > d = c
   | otherwise = d
   where d = a * b
-
 
 -- recursion --------------------------------------------------------------------
 
@@ -193,12 +177,12 @@ listlength [] = 0
 listlength (x:xs) = 1 + listlength xs
 
 {-|-}
-recu [] = []
-recu (x:xs) = x * x : recu xs
+sqEach [] = []
+sqEach (x:xs) = x * x : sqEach xs
 
 {-|-}
-infinity :: a -> [a]
-infinity x = x : infinity x
+nonstop :: a -> [a]
+nonstop x = x : nonstop x
 
 {-|-}
 take' x n = getSubset x (infinity n)
@@ -210,12 +194,6 @@ maksimum (current_maksimum : container_has)
          | maksimum container_has > current_maksimum
            = maksimum container_has
              | otherwise = current_maksimum
-
-{-| take n elems from xs -}
-takeElems _ [] = []
-takeElems n _
-	| n <= 0 = []
-takeElems n (x:xs) = x : takeElems (n-1) xs
 
 {-|-}
 gDown :: Integer -> [Integer]
@@ -266,7 +244,7 @@ multiplyList m (n:ns) = (multiplyByM n) : multiplyList m ns
     multiplyByM x = m * x
 
 {-|-}
-fac::(Num a, Eq a) => a -> a
+fac :: (Num a, Eq a) => a -> a
 fac 0 = 1
 fac n = n * fac(n-1)
 
@@ -287,13 +265,8 @@ calcBmis2 xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
 
 -- functorial -----------------------------------------------------------------
           
-{-| dump shift of sequence provided with boundary paramaters -}
-farrayRemap mov f t = Data.List.map (+mov) [f .. t]
-
 {-|-}
--- p = filt_pinP [2..]
---   where filt_pinP (p:xs) = 
---           p : filt_pinP [x | x <- xs, x `mod` p /= 0]
+farrayRemap mov f t = Data.List.map (+mov) [f .. t]
 
 -- monadic values --------------------------------------------------------------
 
@@ -343,7 +316,6 @@ type Endomorphic a = a -> a
 
 {-|-}
 class Equal a where
---  data TT a :: *->*
   eq, neq :: a -> a -> Bool
 
 {-|-}
@@ -355,7 +327,7 @@ instance Equal Bool where
 {-|-}
 class Collection c where
   type Element c :: *
-  cmember::Element c->c->Bool
+  cmember :: Element c -> c-> Bool
 
 {-|-}
 instance Ord a => Collection (Set a) where
@@ -403,9 +375,7 @@ instance YesNo Int where
   yesno 0 = False
   yesno _ = True  
 
-
 data List a = Nil | Cons a (List a)
-
 
 class Mycomp a where
   comp :: a -> a -> Bool

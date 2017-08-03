@@ -45,6 +45,14 @@ import System.Posix.Files
 
 import CslibBasics
 
+{-| convert to uppercase -}
+shout :: [Char] -> [Char]
+shout = map toUpper
+
+{-| Stub 1 -}
+moder :: [Char] -> [Char]
+moder = Prelude.reverse
+
 {-|-}
 main = addEnd
 
@@ -83,14 +91,6 @@ mainD = liftM shout getContents >>= putStr
 {-| convert to uppercase action ver.5 -}
 mainE :: IO ()
 mainE = fmap (map toUpper) getLine >>= putStrLn
-
-{-| convert to uppercase -}
-shout :: [Char] -> [Char]
-shout = map toUpper
-
-{-| Stub 1 -}
-moder :: [Char] -> [Char]
-moder = Prelude.reverse
 
 {-| if compiled, try @man man | ./dmnt | ./dmnt@ -}
 uglifier :: IO ()
