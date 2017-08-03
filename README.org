@@ -1,4 +1,6 @@
-#+title: basics_lib
+#+title: cslib
+
+Sample Haskell library 
 
 * Usage
 
